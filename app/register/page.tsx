@@ -1,9 +1,9 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 
-export default function RegisterPage() {
+function RegistrationForm() {
   const params = useSearchParams();
   const initialDivision = params.get("division") || "RX";
   const [loading, setLoading] = useState(false);
@@ -67,5 +67,25 @@ export default function RegisterPage() {
         </form>
       </div>
     </main>
+  );
+}
+
+function RegistrationLoading() {
+  return (
+    <main className="container">
+      <div className="form-shell">
+        <div className="eyebrow">Athlete Registration</div>
+        <h2 className="section-title">Training Day Games</h2>
+        <p className="muted">Loading registration...</p>
+      </div>
+    </main>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<RegistrationLoading />}>
+      <RegistrationForm />
+    </Suspense>
   );
 }
