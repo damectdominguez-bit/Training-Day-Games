@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RegistrationStatus { PENDING PAID CANCELED REFUNDED WAITLISTED }
+enum RegistrationType { INDIVIDUAL TEAM }
+
+model Event {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  subtitle String?
+  description String?
+  venue String?
+  city String?
+  state String?
+  startDate DateTime
+  published Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  divisions Division[]
+  registrations Registration[]
+}
+
+model Division {
+  id String @id @default(cuid())
+  eventId String
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name String
+  description String?
+  type RegistrationType
+  priceCents Int
+  capacity Int?
+  teamSize Int @default(1)
+  active Boolean @default(true)
+  registrations Registration[]
+  @@index([eventId])
+}
+
+model Registration {
+  id String @id @default(cuid())
+  eventId String
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  divisionId String
+  division Division @relation(fields: [divisionId], references: [id])
+  status RegistrationStatus @default(PENDING)
+  type RegistrationType
+  teamName String?
+  primaryFirstName String
+  primaryLastName String
+  primaryEmail String
+  primaryPhone String?
+  gymAffiliate String?
+  emergencyContactName String?
+  emergencyContactPhone String?
+  waiverAccepted Boolean @default(false)
+  waiverAcceptedAt DateTime?
+  waiverVersion String?
+  amountCents Int
+  stripeCheckoutSessionId String? @unique
+  stripePaymentIntentId String?
+  createdAt DateTime @default(now())
+  paidAt DateTime?
+  athletes Athlete[]
+  @@index([eventId])
+  @@index([divisionId])
+  @@index([primaryEmail])
+}
+
+model Athlete {
+  id String @id @default(cuid())
+  registrationId String
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  firstName String
+  lastName String
+  email String?
+  shirtSize String?
+  gymAffiliate String?
+  captain Boolean @default(false)
+  @@index([registrationId])
+}
