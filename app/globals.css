@@ -10,82 +10,17 @@ html, body {
 
 a { color: inherit; text-decoration: none; }
 
-.container {
-  width: min(1180px, calc(100% - 40px));
-  margin: 0 auto;
-}
-
-.header {
-  border-bottom: 1px solid #242424;
-  background: rgba(9,9,9,.92);
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  backdrop-filter: blur(12px);
-}
-
-.nav {
-  min-height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.brand {
-  font-weight: 900;
-  letter-spacing: -.04em;
-  font-size: 22px;
-}
-
+.container { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+.header { border-bottom: 1px solid #242424; background: rgba(9,9,9,.92); position: sticky; top: 0; z-index: 20; backdrop-filter: blur(12px); }
+.nav { min-height: 72px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-weight: 900; letter-spacing: -.04em; font-size: 22px; }
 .brand span { color: #F5C400; }
-
-.navlinks {
-  display: flex;
-  gap: 24px;
-  align-items: center;
-  font-size: 14px;
-  color: #bbb;
-}
-
-.button, button {
-  border: 0;
-  border-radius: 8px;
-  background: #F5C400;
-  color: #090909;
-  padding: 14px 20px;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.hero {
-  padding: 92px 0 62px;
-  border-bottom: 1px solid #1c1c1c;
-  background: radial-gradient(circle at 82% 28%, rgba(245,196,0,.14), transparent 22rem), #090909;
-}
-
-.eyebrow {
-  color: #F5C400;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: .12em;
-  font-size: 12px;
-}
-
-h1 {
-  font-size: clamp(48px, 8vw, 92px);
-  line-height: .91;
-  letter-spacing: -.07em;
-  margin: 18px 0 20px;
-  max-width: 900px;
-}
-
-.hero p {
-  max-width: 680px;
-  color: #b8b8b8;
-  font-size: 19px;
-  line-height: 1.6;
-}
-
+.navlinks { display: flex; gap: 24px; align-items: center; font-size: 14px; color: #bbb; }
+.button, button { border: 0; border-radius: 8px; background: #F5C400; color: #090909; padding: 14px 20px; font-weight: 900; cursor: pointer; }
+.hero { padding: 92px 0 62px; border-bottom: 1px solid #1c1c1c; background: radial-gradient(circle at 82% 28%, rgba(245,196,0,.14), transparent 22rem), #090909; }
+.eyebrow { color: #F5C400; font-weight: 900; text-transform: uppercase; letter-spacing: .12em; font-size: 12px; }
+h1 { font-size: clamp(48px, 8vw, 92px); line-height: .91; letter-spacing: -.07em; margin: 18px 0 20px; max-width: 900px; }
+.hero p { max-width: 680px; color: #b8b8b8; font-size: 19px; line-height: 1.6; }
 .meta { display: flex; gap: 34px; flex-wrap: wrap; margin: 34px 0; }
 .meta strong { display:block; font-size:12px; color:#777; text-transform:uppercase; letter-spacing:.1em; margin-bottom:6px; }
 section { padding: 70px 0; }
@@ -99,9 +34,73 @@ section { padding: 70px 0; }
 .form-shell { max-width:760px; margin:36px auto; border:1px solid #2a2a2a; border-radius:16px; background:#111; padding:30px; }
 label { display:block; font-size:13px; font-weight:800; margin-bottom:8px; }
 input, select, textarea { width:100%; padding:13px 14px; background:#090909; border:1px solid #343434; color:white; border-radius:8px; margin-bottom:18px; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: #F5C400; box-shadow: 0 0 0 3px rgba(245,196,0,.08); }
 .row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
 .notice { border-left:3px solid #F5C400; padding:14px 16px; background:#161616; color:#ccc; margin:18px 0; font-size:14px; line-height:1.5; }
 table { width:100%; border-collapse:collapse; background:#111; border:1px solid #252525; }
 th, td { padding:13px; text-align:left; border-bottom:1px solid #252525; font-size:14px; }
 th { color:#999; }
-@media (max-width: 800px) { .grid { grid-template-columns:1fr; } .row { grid-template-columns:1fr; gap:0; } .navlinks a:not(.button) { display:none; } }
+
+.registration-page { padding: 42px 0 90px; }
+.registration-wrap { max-width: 1120px; }
+.registration-progress { display:flex; justify-content:center; gap:42px; padding: 0 0 32px; color:#666; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; border-bottom:1px solid #1d1d1d; }
+.registration-progress .active { color:#F5C400; }
+.registration-layout { display:grid; grid-template-columns:minmax(0, 1fr) 300px; gap:54px; align-items:start; margin-top:46px; }
+.registration-main { min-width:0; }
+.registration-title { font-size:clamp(42px, 6vw, 72px); margin:10px 0 12px; max-width:none; }
+.registration-intro { color:#a8a8a8; font-size:17px; line-height:1.6; max-width:700px; margin:0 0 34px; }
+.form-section { padding:34px 0; border-top:1px solid #242424; }
+.form-section.first-section { border-top:0; padding-top:0; }
+.form-section-heading { display:flex; gap:16px; align-items:flex-start; margin-bottom:24px; }
+.form-section-heading h2 { margin:0 0 5px; font-size:26px; letter-spacing:-.03em; }
+.form-section-heading p { margin:0; color:#777; font-size:14px; line-height:1.45; }
+.section-number { display:flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid #3a3a3a; border-radius:50%; color:#F5C400; font-size:11px; font-weight:900; flex:0 0 34px; }
+.segmented-control { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:20px; }
+.segmented-control button { background:#121212; border:1px solid #343434; color:#bdbdbd; }
+.segmented-control button.selected { color:#090909; background:#F5C400; border-color:#F5C400; }
+.team-name-block { padding-top:6px; }
+.teammate-heading-row { justify-content:space-between; align-items:center; }
+.heading-copy { display:flex; gap:16px; align-items:flex-start; }
+.roster-count { background:#171717; border:1px solid #303030; border-radius:999px; padding:8px 12px; font-size:12px; font-weight:800; color:#d7d7d7; white-space:nowrap; }
+.roster-note { background:#141414; border-left:3px solid #F5C400; color:#aaa; padding:14px 16px; font-size:13px; line-height:1.5; margin-bottom:18px; }
+.teammate-list { display:grid; gap:16px; }
+.teammate-card { background:#101010; border:1px solid #292929; border-radius:14px; padding:22px; }
+.teammate-card-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; }
+.teammate-kicker { display:block; color:#F5C400; text-transform:uppercase; letter-spacing:.1em; font-size:10px; font-weight:900; margin-bottom:4px; }
+.teammate-card h3 { margin:0; font-size:21px; }
+.remove-teammate { background:transparent; border:1px solid #353535; color:#aaa; padding:8px 11px; font-size:11px; }
+.remove-teammate:hover { border-color:#666; color:#fff; }
+.add-teammate { width:100%; margin-top:16px; background:transparent; color:#F5C400; border:1px dashed #4a4214; padding:16px; }
+.add-teammate span { font-size:18px; margin-right:6px; }
+.waiver-copy { background:#101010; border:1px solid #292929; border-radius:10px; padding:18px; color:#aaa; font-size:13px; line-height:1.6; margin-bottom:16px; max-height:180px; overflow:auto; }
+.waiver-copy strong { color:#fff; }
+.checkbox-label { display:flex; gap:10px; align-items:flex-start; font-weight:600; line-height:1.45; color:#ddd; }
+.checkbox-label input { width:18px; height:18px; margin:1px 0 0; flex:0 0 18px; accent-color:#F5C400; }
+.checkout-button { width:100%; padding:17px 20px; font-size:15px; }
+.form-error { background:#2b1111; border:1px solid #5b2424; color:#ffaaaa; border-radius:8px; padding:13px 14px; margin-bottom:14px; font-size:13px; }
+.registration-summary { position:relative; }
+.summary-sticky { position:sticky; top:105px; background:#111; border:1px solid #2d2d2d; border-radius:14px; padding:22px; }
+.summary-label { color:#F5C400; font-size:10px; text-transform:uppercase; letter-spacing:.12em; font-weight:900; }
+.summary-sticky h3 { margin:7px 0 22px; font-size:24px; letter-spacing:-.03em; }
+.summary-line { display:flex; justify-content:space-between; gap:20px; margin:12px 0; color:#929292; font-size:13px; }
+.summary-line strong { color:#fff; text-align:right; }
+.summary-divider { height:1px; background:#2b2b2b; margin:18px 0; }
+.summary-help { color:#777; font-size:12px; line-height:1.55; margin:0; }
+
+@media (max-width: 900px) {
+  .registration-layout { grid-template-columns:1fr; }
+  .registration-summary { order:-1; }
+  .summary-sticky { position:static; }
+  .registration-progress { justify-content:flex-start; overflow:auto; gap:26px; }
+}
+
+@media (max-width: 800px) {
+  .grid { grid-template-columns:1fr; }
+  .row { grid-template-columns:1fr; gap:0; }
+  .navlinks a:not(.button) { display:none; }
+  .registration-page { padding-top:24px; }
+  .registration-layout { margin-top:28px; gap:28px; }
+  .registration-title { font-size:44px; }
+  .form-section-heading { gap:12px; }
+  .teammate-heading-row { align-items:flex-start; }
+}
