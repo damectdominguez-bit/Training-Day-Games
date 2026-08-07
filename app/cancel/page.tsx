@@ -1,12 +1,10 @@
 export default function Cancel() {
   return (
-    <main className="container">
-      <div className="form-shell">
-        <div className="eyebrow">Checkout canceled</div>
-        <h2 className="section-title">Your spot is not confirmed.</h2>
-        <p className="muted">No completed payment was recorded. You can return to registration and try again.</p>
-        <a className="button" href="/register">Return to Registration</a>
-      </div>
+    <main className="container confirmation-page">
+      <div className="micro-label">Checkout canceled</div>
+      <h1>SPOT NOT<br/>LOCKED.</h1>
+      <p>No completed payment was recorded. Your registration is still open if you want to finish it.</p>
+      <a className="primary-cta" href="/register">Return to registration <span>→</span></a>
     </main>
   );
 }
