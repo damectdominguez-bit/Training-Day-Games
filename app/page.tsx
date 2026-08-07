@@ -1,5 +1,6 @@
 import "./home-v2.css";
 
+// Deployment refresh: simplified TDG event homepage.
 const divisions = [
   { code: "RX", name: "RX", note: "Advanced standards" },
   { code: "INT", name: "Intermediate", note: "Competitive field" },
