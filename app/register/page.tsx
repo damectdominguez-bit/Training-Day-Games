@@ -2,7 +2,7 @@
 
 import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import "./register-v2.css";
+import "./register-v3.css";
 
 type Athlete = { id:number; firstName:string; lastName:string; email:string; gender:string; shirtSize:string; gym:string };
 type Captain = { firstName:string; lastName:string; email:string; phone:string; gender:string; birthDate:string; gym:string; shirtSize:string };
@@ -26,29 +26,32 @@ function RegistrationWizard(){
   const [error,setError] = useState("");
 
   const steps = useMemo(() => type === "TEAM" ? ["Entry","Captain","Roster","Safety","Review"] : ["Entry","Athlete","Safety","Review"], [type]);
+  const current = steps[step];
   const last = steps.length - 1;
-  const progress = ((step + 1) / steps.length) * 100;
+
   const updateCaptain = (field:keyof Captain,value:string) => setCaptain(c => ({...c,[field]:value}));
   const updateMate = (id:number,field:keyof Athlete,value:string) => setTeammates(all => all.map(a => a.id===id ? {...a,[field]:value} : a));
+  const go = (n:number) => { setStep(Math.max(0,Math.min(n,last))); setError(""); window.scrollTo({top:0,behavior:"smooth"}); };
 
   function addMate(){
     if(teammates.length>=4) return;
-    const id = Math.max(0,...teammates.map(t=>t.id))+1;
-    setTeammates(t=>[...t,blankAthlete(id)]); setEditing(id);
+    const id=Math.max(0,...teammates.map(t=>t.id))+1;
+    setTeammates(t=>[...t,blankAthlete(id)]);
+    setEditing(id);
   }
   function removeMate(id:number){
-    const next=teammates.filter(t=>t.id!==id); setTeammates(next); if(editing===id && next[0]) setEditing(next[0].id);
+    const next=teammates.filter(t=>t.id!==id);
+    setTeammates(next);
+    if(editing===id && next[0]) setEditing(next[0].id);
   }
-  function next(){ setError(""); setStep(s=>Math.min(s+1,last)); window.scrollTo({top:0,behavior:"smooth"}); }
-  function back(){ setError(""); setStep(s=>Math.max(s-1,0)); window.scrollTo({top:0,behavior:"smooth"}); }
 
   async function checkout(){
     if(!waiver){ setError("Please accept the waiver and event policies before continuing."); return; }
     setLoading(true); setError("");
     try{
       const response=await fetch("/api/checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-        division, registrationType:type, teamName:type==="TEAM"?teamName:"", ...captain,
-        emergencyName, emergencyPhone, waiver:"on", teammates:type==="TEAM"?teammates:[]
+        division,registrationType:type,teamName:type==="TEAM"?teamName:"",...captain,
+        emergencyName,emergencyPhone,waiver:"on",teammates:type==="TEAM"?teammates:[]
       })});
       const data=await response.json();
       if(!response.ok) throw new Error(data.error || "Registration could not be started.");
@@ -56,75 +59,95 @@ function RegistrationWizard(){
     }catch(e){ setError(e instanceof Error?e.message:"Registration could not be started."); setLoading(false); }
   }
 
-  const stageTitle = step===0 ? "PICK YOUR FIGHT." : step===1 ? (type==="TEAM"?"LEAD THE TEAM.":"THIS IS YOU.") : steps[step]==="Roster" ? "BUILD THE SQUAD." : steps[step]==="Safety" ? "READY IS READY." : "ONE LAST LOOK.";
-  const stageCopy = step===0 ? "Choose the field. Choose how you enter. Everything after this is built around that decision." : step===1 ? "No profile page. No account setup maze. Just the athlete information we actually need." : steps[step]==="Roster" ? "Every teammate lives inside the same entry. One captain. One roster. One checkout." : steps[step]==="Safety" ? "Emergency details and the event waiver live together in one final responsibility step." : "Review the entry, then lock it in with one secure payment.";
-
-  return <main className="v2-page">
-    <aside className="v2-stage">
-      <div className="v2-stage-top"><span>Training Day Games / 2027</span><span>Miami, FL</span></div>
-      <div className="v2-stage-main"><small>{String(step+1).padStart(2,"0")} / {String(steps.length).padStart(2,"0")} · {steps[step]}</small><h1>{stageTitle}</h1><p>{stageCopy}</p></div>
-      <div className="v2-stage-bottom">
-        <div><span>Division</span><strong>{division}</strong></div>
-        <div><span>Format</span><strong>{type==="TEAM"?"Team":"Individual"}</strong></div>
-        <div><span>Entry</span><strong>{type==="TEAM"?`${teammates.length+1} athletes`:"1 athlete"}</strong></div>
+  return <main className="v3-page">
+    <div className="v3-shell">
+      <div className="v3-topbar">
+        <div className="v3-brand">TRAINING DAY <span>GAMES</span></div>
+        <div className="v3-status">Registration Open</div>
+        <button className="v3-exit" onClick={()=>history.back()}>Exit registration ↗</button>
       </div>
-    </aside>
 
-    <section className="v2-work">
-      <div className="v2-topbar"><button className="v2-back" onClick={step?back:()=>history.back()}>{step?"← Back":"← Exit"}</button><div className="v2-step-meta"><span>Step</span><b>{String(step+1).padStart(2,"0")}</b><span>of {String(steps.length).padStart(2,"0")}</span></div></div>
-      <div className="v2-progress"><i style={{width:`${progress}%`}}/></div>
-      <div className="v2-content v2-form">
-        {step===0 && <>
-          <div className="v2-kicker">Start here</div><h2>Choose your entry.</h2><p className="v2-lede">No long form yet. First, tell us where you belong.</p>
-          <div className="v2-choice-grid">{[["RX","RX","Advanced","Full standards. Full test."],["Intermediate","INT","Competitive","Built for experienced competitors."],["Scaled","SCL","Open","Big-event feel with accessible standards."]].map(([name,code,tag,copy])=><button key={name} className={`v2-choice ${division===name?"active":""}`} onClick={()=>setDivision(name)}><span className="v2-check">{division===name?"✓":""}</span><span className="v2-choice-code">{code}</span><span className="v2-choice-tag">{tag}</span><strong>{name}</strong><p>{copy}</p></button>)}</div>
-          <div className="v2-format-grid">
-            <button className={`v2-format ${type==="INDIVIDUAL"?"active":""}`} onClick={()=>{setType("INDIVIDUAL"); if(step>3)setStep(0)}}><span className="v2-format-num">01</span><div><strong>Individual</strong><p>One athlete. One result. One entry.</p></div></button>
-            <button className={`v2-format ${type==="TEAM"?"active":""}`} onClick={()=>setType("TEAM")}><span className="v2-format-num">02</span><div><strong>Team</strong><p>Captain controls the roster and payment.</p></div></button>
-          </div>
-          {type==="TEAM" && <div className="v2-teamname"><label>Team name</label><input value={teamName} onChange={e=>setTeamName(e.target.value)} placeholder="Give the squad a name"/></div>}
-          <div className="v2-actions"><span/><button className="v2-next" onClick={next}>Build entry <span>→</span></button></div>
-        </>}
+      <section className="v3-hero">
+        <div>
+          <div className="v3-hero-kicker">Miami · 2027 · Official athlete entry</div>
+          <h1>YOUR SPOT.<br/><em>YOUR DAY.</em></h1>
+        </div>
+        <div className="v3-credential">
+          <small>TDG / Entry credential</small>
+          <strong>{division}<br/>{type==="TEAM"?"Team":"Individual"}</strong>
+          <div className="v3-credential-row"><span>Miami, FL</span><span>{type==="TEAM"?`${teammates.length+1} athletes`:"1 athlete"}</span></div>
+        </div>
+      </section>
 
-        {step===1 && <>
-          <div className="v2-kicker">{type==="TEAM"?"Captain":"Athlete"}</div><h2>{type==="TEAM"?"Lead the entry.":"Your details."}</h2><p className="v2-lede">Just the essentials. This information becomes the primary athlete profile for the registration.</p>
-          <div className="v2-row"><div><label>First name</label><input value={captain.firstName} onChange={e=>updateCaptain("firstName",e.target.value)}/></div><div><label>Last name</label><input value={captain.lastName} onChange={e=>updateCaptain("lastName",e.target.value)}/></div></div>
-          <div className="v2-row"><div><label>Email</label><input type="email" value={captain.email} onChange={e=>updateCaptain("email",e.target.value)}/></div><div><label>Phone</label><input value={captain.phone} onChange={e=>updateCaptain("phone",e.target.value)}/></div></div>
-          <div className="v2-row"><div><label>Gender</label><select value={captain.gender} onChange={e=>updateCaptain("gender",e.target.value)}><option value="">Select</option><option>Male</option><option>Female</option></select></div><div><label>Date of birth</label><input type="date" value={captain.birthDate} onChange={e=>updateCaptain("birthDate",e.target.value)}/></div></div>
-          <div className="v2-row"><div><label>Gym / Affiliate</label><input value={captain.gym} onChange={e=>updateCaptain("gym",e.target.value)} placeholder="Optional"/></div><div><label>Shirt size</label><select value={captain.shirtSize} onChange={e=>updateCaptain("shirtSize",e.target.value)}><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>2XL</option></select></div></div>
-          <div className="v2-actions"><button className="v2-secondary" onClick={back}>Back</button><button className="v2-next" onClick={next}>{type==="TEAM"?"Build roster":"Continue"}<span>→</span></button></div>
-        </>}
+      <div className="v3-progress">{steps.map((_,i)=><div key={i} className={`v3-progress-item ${i<step?"done":i===step?"active":""}`}/>)}</div>
+      <div className="v3-progress-labels"><b>{String(step+1).padStart(2,"0")} / {String(steps.length).padStart(2,"0")} · {current}</b><span>{steps.join("  /  ")}</span></div>
 
-        {type==="TEAM" && steps[step]==="Roster" && <>
-          <div className="v2-roster-head"><div><div className="v2-kicker">Team roster</div><h2>Build the squad.</h2></div><div className="v2-roster-count">{teammates.length+1} athletes</div></div>
-          <div className="v2-captain-banner"><span>01</span><div><strong>{captain.firstName||"Captain"} {captain.lastName}</strong><small>Primary contact · locked roster spot</small></div><em>YOU</em></div>
-          <div className="v2-roster-list">{teammates.map((a,i)=><div className="v2-athlete-row" key={a.id}><span>{String(i+2).padStart(2,"0")}</span><div><strong>{a.firstName||`Athlete ${i+2}`} {a.lastName}</strong><small>{a.email||"Details not complete"}</small></div><button onClick={()=>setEditing(a.id)}>Edit</button></div>)}</div>
-          {teammates.length<4 && <button className="v2-add" onClick={addMate}><b>+</b><span><strong>Add teammate</strong><small>Open another roster spot</small></span></button>}
-          {teammates.filter(a=>a.id===editing).map(a=><div className="v2-edit-card" key={a.id}><div className="v2-edit-head"><h3>Edit athlete</h3>{teammates.length>1&&<button onClick={()=>removeMate(a.id)}>Remove athlete</button>}</div><div className="v2-row"><div><label>First name</label><input value={a.firstName} onChange={e=>updateMate(a.id,"firstName",e.target.value)}/></div><div><label>Last name</label><input value={a.lastName} onChange={e=>updateMate(a.id,"lastName",e.target.value)}/></div></div><div className="v2-row"><div><label>Email</label><input value={a.email} onChange={e=>updateMate(a.id,"email",e.target.value)}/></div><div><label>Gender</label><select value={a.gender} onChange={e=>updateMate(a.id,"gender",e.target.value)}><option value="">Select</option><option>Male</option><option>Female</option></select></div></div><div className="v2-row"><div><label>Gym / Affiliate</label><input value={a.gym} onChange={e=>updateMate(a.id,"gym",e.target.value)} placeholder="Optional"/></div><div><label>Shirt size</label><select value={a.shirtSize} onChange={e=>updateMate(a.id,"shirtSize",e.target.value)}><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>2XL</option></select></div></div></div>)}
-          <div className="v2-actions"><button className="v2-secondary" onClick={back}>Back</button><button className="v2-next" onClick={next}>Continue <span>→</span></button></div>
-        </>}
+      <div className="v3-stage">
+        <aside className="v3-step-index">
+          <div className="v3-step-number">{String(step+1).padStart(2,"0")}</div>
+          <div className="v3-step-name">{current}</div>
+          <div className="v3-step-note">{current==="Entry"?"Choose how you want to compete.":current==="Roster"?"Build the lineup before checkout.":current==="Review"?"Make sure everything looks right.":"Only the information we actually need."}</div>
+        </aside>
 
-        {steps[step]==="Safety" && <>
-          <div className="v2-kicker">Safety + waiver</div><h2>Ready is ready.</h2><p className="v2-lede">One final responsibility step before review.</p>
-          <div className="v2-row"><div><label>Emergency contact</label><input value={emergencyName} onChange={e=>setEmergencyName(e.target.value)}/></div><div><label>Emergency phone</label><input value={emergencyPhone} onChange={e=>setEmergencyPhone(e.target.value)}/></div></div>
-          <div className="v2-waiver"><strong>Participant waiver placeholder</strong>The final Training Day Games participation waiver, assumption of risk, media release and event policies will appear here before registration opens.</div>
-          <label className="v2-checkrow"><input type="checkbox" checked={waiver} onChange={e=>setWaiver(e.target.checked)}/><span>I have read and agree to the Training Day Games waiver and event policies.</span></label>
-          <div className="v2-actions"><button className="v2-secondary" onClick={back}>Back</button><button className="v2-next" onClick={next}>Review entry <span>→</span></button></div>
-        </>}
+        <section className="v3-card v3-form">
+          {current==="Entry" && <>
+            <div className="v3-kicker">Start here</div>
+            <h2>Pick your division.</h2>
+            <p className="v3-lede">Three fields. One competition. Choose the level that fits, then tell us whether you’re coming solo or bringing a team.</p>
+            <div className="v3-choice-grid">
+              {[["RX","RX","Full standards"],["Intermediate","INT","Competitive"],["Scaled","SCL","Open field"]].map(([name,code,copy])=><button key={name} className={`v3-choice ${division===name?"active":""}`} onClick={()=>setDivision(name)}><span className="v3-choice-check">{division===name?"✓":""}</span><div className="v3-choice-code">{code}</div><small>{copy}</small></button>)}
+            </div>
+            <div className="v3-format-grid">
+              <button className={`v3-format ${type==="INDIVIDUAL"?"active":""}`} onClick={()=>setType("INDIVIDUAL")}><span className="v3-format-icon">01</span><div><strong>Individual</strong><span>One athlete. One entry.</span></div></button>
+              <button className={`v3-format ${type==="TEAM"?"active":""}`} onClick={()=>setType("TEAM")}><span className="v3-format-icon">+</span><div><strong>Team</strong><span>Captain builds the roster.</span></div></button>
+            </div>
+            {type==="TEAM" && <div className="v3-field"><label>Team name</label><input value={teamName} onChange={e=>setTeamName(e.target.value)} placeholder="Give the squad a name"/></div>}
+            <div className="v3-actions"><span/><button className="v3-next" onClick={()=>go(1)}>Continue <span>→</span></button></div>
+          </>}
 
-        {steps[step]==="Review" && <>
-          <div className="v2-kicker">Final review</div><h2>One last look.</h2><p className="v2-lede">This is the entry that will be attached to your payment and competition record.</p>
-          <div className="v2-review">
-            <div className="v2-review-card"><div><span>Competition</span><strong>{division} · {type==="TEAM"?"Team":"Individual"}</strong></div><button onClick={()=>setStep(0)}>Edit</button></div>
-            <div className="v2-review-card"><div><span>{type==="TEAM"?"Captain":"Athlete"}</span><strong>{captain.firstName||"—"} {captain.lastName}</strong></div><button onClick={()=>setStep(1)}>Edit</button></div>
-            {type==="TEAM"&&<div className="v2-review-card"><div><span>Roster</span><strong>{teammates.length+1} athletes · {teamName||"Team name not set"}</strong></div><button onClick={()=>setStep(2)}>Edit</button></div>}
-            <div className="v2-review-card"><div><span>Emergency contact</span><strong>{emergencyName||"—"}</strong></div><button onClick={()=>setStep(type==="TEAM"?3:2)}>Edit</button></div>
-          </div>
-          {error&&<div className="v2-error">{error}</div>}
-          <button className="v2-pay" onClick={checkout} disabled={loading}>{loading?"Opening secure checkout...":"Lock in the entry"}<span>→</span></button>
-          <div className="v2-actions"><button className="v2-secondary" onClick={back}>Back</button><span/></div>
-        </>}
+          {(current==="Captain"||current==="Athlete") && <>
+            <div className="v3-kicker">{type==="TEAM"?"Team captain":"Athlete profile"}</div>
+            <h2>{type==="TEAM"?"Who’s leading?":"Tell us who you are."}</h2>
+            <p className="v3-lede">This becomes the primary athlete and contact attached to the registration.</p>
+            <div className="v3-row"><div><label>First name</label><input value={captain.firstName} onChange={e=>updateCaptain("firstName",e.target.value)}/></div><div><label>Last name</label><input value={captain.lastName} onChange={e=>updateCaptain("lastName",e.target.value)}/></div></div>
+            <div className="v3-row"><div><label>Email</label><input type="email" value={captain.email} onChange={e=>updateCaptain("email",e.target.value)}/></div><div><label>Phone</label><input value={captain.phone} onChange={e=>updateCaptain("phone",e.target.value)}/></div></div>
+            <div className="v3-row"><div><label>Gender</label><select value={captain.gender} onChange={e=>updateCaptain("gender",e.target.value)}><option value="">Select</option><option>Male</option><option>Female</option></select></div><div><label>Date of birth</label><input type="date" value={captain.birthDate} onChange={e=>updateCaptain("birthDate",e.target.value)}/></div></div>
+            <div className="v3-row"><div><label>Gym / Affiliate</label><input value={captain.gym} onChange={e=>updateCaptain("gym",e.target.value)} placeholder="Optional"/></div><div><label>Shirt size</label><select value={captain.shirtSize} onChange={e=>updateCaptain("shirtSize",e.target.value)}><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>2XL</option></select></div></div>
+            <div className="v3-actions"><button className="v3-back" onClick={()=>go(step-1)}>← Back</button><button className="v3-next" onClick={()=>go(step+1)}>{type==="TEAM"?"Build roster":"Continue"}<span>→</span></button></div>
+          </>}
+
+          {current==="Roster" && <>
+            <div className="v3-roster-top"><div><div className="v3-kicker">Team lineup</div><h2>Build your roster.</h2></div><div className="v3-count">{teammates.length+1} athletes</div></div>
+            <div className="v3-captain"><span>01</span><div><strong>{captain.firstName||"Captain"} {captain.lastName}</strong><small>Primary contact · locked</small></div><em>YOU</em></div>
+            <div className="v3-roster-list">{teammates.map((a,i)=><div className="v3-athlete" key={a.id}><span>{String(i+2).padStart(2,"0")}</span><div><strong>{a.firstName||`Athlete ${i+2}`} {a.lastName}</strong><small>{a.email||"Details not complete"}</small></div><button onClick={()=>setEditing(a.id)}>Edit</button></div>)}</div>
+            {teammates.length<4 && <button className="v3-add" onClick={addMate}><b>+</b><span><strong>Add teammate</strong><small>Open another roster spot</small></span></button>}
+            {teammates.filter(a=>a.id===editing).map(a=><div className="v3-edit" key={a.id}><div className="v3-edit-head"><h3>Athlete details</h3>{teammates.length>1&&<button onClick={()=>removeMate(a.id)}>Remove athlete</button>}</div><div className="v3-row"><div><label>First name</label><input value={a.firstName} onChange={e=>updateMate(a.id,"firstName",e.target.value)}/></div><div><label>Last name</label><input value={a.lastName} onChange={e=>updateMate(a.id,"lastName",e.target.value)}/></div></div><div className="v3-row"><div><label>Email</label><input value={a.email} onChange={e=>updateMate(a.id,"email",e.target.value)}/></div><div><label>Gender</label><select value={a.gender} onChange={e=>updateMate(a.id,"gender",e.target.value)}><option value="">Select</option><option>Male</option><option>Female</option></select></div></div><div className="v3-row"><div><label>Gym / Affiliate</label><input value={a.gym} onChange={e=>updateMate(a.id,"gym",e.target.value)} placeholder="Optional"/></div><div><label>Shirt size</label><select value={a.shirtSize} onChange={e=>updateMate(a.id,"shirtSize",e.target.value)}><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>2XL</option></select></div></div></div>)}
+            <div className="v3-actions"><button className="v3-back" onClick={()=>go(step-1)}>← Back</button><button className="v3-next" onClick={()=>go(step+1)}>Continue <span>→</span></button></div>
+          </>}
+
+          {current==="Safety" && <>
+            <div className="v3-kicker">Safety + waiver</div><h2>Almost there.</h2><p className="v3-lede">Emergency details and the event waiver. Then you’ll get one clean review screen.</p>
+            <div className="v3-row"><div><label>Emergency contact</label><input value={emergencyName} onChange={e=>setEmergencyName(e.target.value)}/></div><div><label>Emergency phone</label><input value={emergencyPhone} onChange={e=>setEmergencyPhone(e.target.value)}/></div></div>
+            <div className="v3-waiver"><strong>Participant waiver placeholder</strong>The final Training Day Games participation waiver, assumption of risk, media release and event policies will appear here before registration opens.</div>
+            <label className="v3-checkrow"><input type="checkbox" checked={waiver} onChange={e=>setWaiver(e.target.checked)}/><span>I have read and agree to the Training Day Games waiver and event policies.</span></label>
+            <div className="v3-actions"><button className="v3-back" onClick={()=>go(step-1)}>← Back</button><button className="v3-next" onClick={()=>go(step+1)}>Review entry <span>→</span></button></div>
+          </>}
+
+          {current==="Review" && <>
+            <div className="v3-kicker">Final review</div><h2>Ready to lock it in?</h2><p className="v3-lede">This is what will be attached to your payment and competition record.</p>
+            <div className="v3-review">
+              <div className="v3-review-card"><div><span>Competition</span><strong>{division} · {type==="TEAM"?"Team":"Individual"}</strong></div><button onClick={()=>go(0)}>Edit</button></div>
+              <div className="v3-review-card"><div><span>{type==="TEAM"?"Captain":"Athlete"}</span><strong>{captain.firstName||"—"} {captain.lastName}</strong></div><button onClick={()=>go(1)}>Edit</button></div>
+              {type==="TEAM"&&<div className="v3-review-card"><div><span>Roster</span><strong>{teammates.length+1} athletes · {teamName||"Team name not set"}</strong></div><button onClick={()=>go(2)}>Edit</button></div>}
+              <div className="v3-review-card"><div><span>Emergency contact</span><strong>{emergencyName||"—"}</strong></div><button onClick={()=>go(type==="TEAM"?3:2)}>Edit</button></div>
+            </div>
+            {error&&<div className="v3-error">{error}</div>}
+            <button className="v3-pay" onClick={checkout} disabled={loading}>{loading?"Opening secure checkout...":"Lock in the entry"}<span>→</span></button>
+            <div className="v3-actions"><button className="v3-back" onClick={()=>go(step-1)}>← Back</button><span/></div>
+          </>}
+        </section>
       </div>
-    </section>
+    </div>
   </main>
 }
 
