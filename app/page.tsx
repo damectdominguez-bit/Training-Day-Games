@@ -1,6 +1,5 @@
-import "./home-v2.css";
+import "./home-v3.css";
 
-// Deployment refresh: simplified TDG event homepage.
 const divisions = [
   { code: "RX", name: "RX", note: "Advanced standards" },
   { code: "INT", name: "Intermediate", note: "Competitive field" },
@@ -9,91 +8,100 @@ const divisions = [
 
 export default function Home() {
   return (
-    <main className="home2">
-      <section className="home2-hero" id="event">
-        <div className="container home2-hero-grid">
+    <main className="event-home">
+      <section className="event-hero" id="event">
+        <div className="container event-hero-grid">
           <div>
-            <div className="home2-kicker">Miami · 2027 · Training Day Games</div>
-            <h1>YOUR TRAINING<br/><span>HAS A DAY.</span></h1>
-            <p className="home2-copy">
-              A competition built for athletes who want a real test, a real crowd and a day that feels worth training for.
+            <div className="event-kicker">Miami · Functional Fitness Competition</div>
+            <h1 className="event-title">TRAINING DAY<br/><span>GAMES.</span></h1>
+            <p className="event-intro">
+              One day of serious competition, strong fields and a crowd that came to watch people race.
             </p>
-            <div className="home2-actions">
-              <a className="home2-primary" href="/register">Register now <span>→</span></a>
-              <a className="home2-secondary" href="#divisions">View divisions <span>↓</span></a>
+            <div className="event-actions">
+              <a className="event-primary" href="/register">Register now <span>→</span></a>
+              <a className="event-secondary" href="#divisions">View divisions <span>↓</span></a>
             </div>
           </div>
 
-          <aside className="home2-pass">
-            <div className="home2-pass-top"><span>TDG / Event card</span><span>2027</span></div>
-            <div className="home2-pass-main">
-              <small>The event</small>
-              <h2>TRAIN.<br/>SHOW UP.<br/>COMPETE.</h2>
+          <aside className="event-info-card">
+            <div className="event-info-top"><span>Official event details</span><span>TDG / 2027</span></div>
+            <div className="event-date-block">
+              <small>Date</small>
+              <strong>AUG 17<br/>2027</strong>
             </div>
-            <div className="home2-pass-facts">
-              <div><span>Location</span><strong>Miami, FL</strong></div>
-              <div><span>Date</span><strong>Summer 2027</strong></div>
+            <div className="event-location">
+              <span>Venue</span>
+              <strong>Miami Fairgrounds &amp; Expo Center</strong>
+            </div>
+            <div className="event-info-bottom">
+              <div><span>City</span><strong>Miami, FL</strong></div>
               <div><span>Format</span><strong>Individual + Team</strong></div>
-              <div><span>Status</span><strong>Registration open</strong></div>
             </div>
           </aside>
         </div>
       </section>
 
-      <section className="home2-intro">
-        <div className="container home2-intro-grid">
-          <div className="home2-intro-label">What this is</div>
+      <section className="event-strip">
+        <div className="container event-strip-grid">
+          <div className="event-strip-item"><span>01</span><strong>One-day competition</strong></div>
+          <div className="event-strip-item"><span>02</span><strong>RX · Intermediate · Scaled</strong></div>
+          <div className="event-strip-item"><span>03</span><strong>Individual + Team</strong></div>
+          <div className="event-strip-item"><span>04</span><strong>Miami, Florida</strong></div>
+        </div>
+      </section>
+
+      <section className="event-about">
+        <div className="container event-about-grid">
+          <div className="event-label">The event</div>
           <div>
-            <h2>MORE THAN A LOCAL COMP.<br/><span>WITHOUT TRYING TOO HARD.</span></h2>
-            <div className="home2-intro-text">
+            <h2>BUILT TO FEEL<br/><span>LIKE IT MATTERS.</span></h2>
+            <div className="event-about-copy">
               <p>
-                Training Day Games is designed to feel polished, competitive and fun without turning the day into a circus. Good programming. Good flow. Good energy.
+                Training Day Games is a functional fitness competition built around good programming, clean event flow and athletes who actually want to race.
               </p>
               <p>
-                Athletes should leave feeling tested. Spectators should want to stay. Teams should already be talking about coming back.
+                The goal is simple: create a competition athletes want to train for, spectators want to stay for and gyms want to come back to.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="home2-why">
+      <section className="event-pillars">
         <div className="container">
-          <div className="home2-section-head">
-            <h2>WHY SHOW UP?</h2>
-            <p>Keep it simple: a better competition experience for athletes, teams and the people who come to watch them.</p>
+          <div className="event-section-head">
+            <h2>WHAT TO EXPECT.</h2>
+            <p>No overcomplicated pitch. Just the things that should make a competition worth doing.</p>
           </div>
-
-          <div className="home2-why-grid">
-            <article className="home2-why-card">
+          <div className="event-pillar-grid">
+            <article className="event-pillar">
               <div className="num">01</div>
-              <h3>A REAL TEST.</h3>
-              <p>Programming that rewards fitness, pacing, skill and the ability to compete under pressure.</p>
+              <h3>GOOD TESTS.</h3>
+              <p>Programming that rewards fitness, execution, pacing and the ability to perform under pressure.</p>
             </article>
-            <article className="home2-why-card">
+            <article className="event-pillar">
               <div className="num">02</div>
-              <h3>A BETTER DAY.</h3>
-              <p>Clean event flow, loud energy and an atmosphere that feels bigger than a normal weekend competition.</p>
+              <h3>REAL ENERGY.</h3>
+              <p>A floor that feels alive, with athletes, gyms and spectators all part of the same event.</p>
             </article>
-            <article className="home2-why-card">
+            <article className="event-pillar">
               <div className="num">03</div>
-              <h3>YOUR PEOPLE.</h3>
-              <p>Athletes, gyms, teams and spectators all in the same place for the same reason: compete and enjoy it.</p>
+              <h3>CLEAN FLOW.</h3>
+              <p>Clear heats, organized lanes and an event day that respects the athlete experience.</p>
             </article>
           </div>
         </div>
       </section>
 
-      <section className="home2-divisions" id="divisions">
+      <section className="event-divisions" id="divisions">
         <div className="container">
-          <div className="home2-section-head">
+          <div className="event-section-head">
             <h2>CHOOSE YOUR FIELD.</h2>
-            <p>Different standards. Same floor. Pick the division that gives you the best race.</p>
+            <p>Different standards. Same event. Pick the division that gives you the best race.</p>
           </div>
-
-          <div className="home2-division-list">
+          <div className="event-division-list">
             {divisions.map((division) => (
-              <a className="home2-division-row" href={`/register?division=${encodeURIComponent(division.name)}`} key={division.name}>
+              <a className="event-division-row" href={`/register?division=${encodeURIComponent(division.name)}`} key={division.name}>
                 <span className="code">{division.code}</span>
                 <div><strong>{division.name}</strong><small>{division.note}</small></div>
                 <span className="arrow">↗</span>
@@ -103,13 +111,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="home2-cta">
-        <div className="container home2-cta-grid">
+      <section className="event-cta">
+        <div className="container event-cta-grid">
           <div>
-            <h2>READY<br/>WHEN YOU ARE.</h2>
-            <p>Pick your division, build your entry and lock in your spot for Training Day Games.</p>
+            <h2>SEE YOU<br/>ON THE FLOOR.</h2>
+            <p>August 17, 2027 · Miami Fairgrounds &amp; Expo Center</p>
           </div>
-          <a className="home2-secondary" href="/register">Start registration <span>→</span></a>
+          <a className="event-secondary" href="/register">Start registration <span>→</span></a>
         </div>
       </section>
     </main>
