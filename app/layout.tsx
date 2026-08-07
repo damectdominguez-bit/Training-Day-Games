@@ -1,4 +1,5 @@
 import "./globals.css";
+import "./secondary.css";
 import type { Metadata } from "next";
 import { tdgLogo } from "./logo-data";
 
