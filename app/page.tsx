@@ -1,41 +1,78 @@
+import { tdgLogo } from "./logo-data";
+
 const divisions = [
-  { name: "RX", price: "$199", description: "For experienced competitors comfortable with advanced functional-fitness movements and heavier loading." },
-  { name: "Intermediate", price: "$179", description: "A competitive division for well-rounded athletes who are not yet competing at RX standards." },
-  { name: "Scaled", price: "$159", description: "Accessible competition with appropriately scaled gymnastics, loading and skill requirements." },
+  { name: "RX", tag: "Advanced", description: "Full standards. Heavy loads. High-skill gymnastics. Built for experienced competitors." },
+  { name: "Intermediate", tag: "Competitive", description: "Serious fitness, real pace and a complete test without the top-end RX barrier." },
+  { name: "Scaled", tag: "Open", description: "A true competition experience with accessible movement standards and the same event energy." },
 ];
 
 export default function Home() {
   return (
     <main>
-      <div className="hero">
-        <div className="container">
-          <div className="eyebrow">Miami • 2027</div>
-          <h1>YOUR TRAINING<br/>HAS A DAY.</h1>
-          <p>The Training Day Games bring together athletes, gyms and the South Florida fitness community for a full day of competition.</p>
-          <div className="meta">
-            <div><strong>Date</strong>2027 date coming soon</div>
-            <div><strong>Location</strong>Miami, Florida</div>
-            <div><strong>Registration</strong>Opening soon</div>
+      <section className="home-hero" id="event">
+        <div className="container home-hero-grid">
+          <div className="home-hero-copy">
+            <div className="micro-label">Miami · 2027 · Functional Fitness</div>
+            <h1>SHOW UP<br/>FOR YOUR<br/><em>TRAINING.</em></h1>
+            <p>The Training Day Games is built to feel bigger than a local comp — sharp programming, a premium floor, loud energy and athletes who came to compete.</p>
+            <div className="hero-actions">
+              <a className="primary-cta" href="/register">Register to compete <span>→</span></a>
+              <a className="text-link" href="#divisions">Explore divisions</a>
+            </div>
+            <div className="hero-facts">
+              <div><span>01</span><strong>Miami, FL</strong><small>South Florida</small></div>
+              <div><span>02</span><strong>Summer 2027</strong><small>Final date coming</small></div>
+              <div><span>03</span><strong>Individual + Team</strong><small>Multiple divisions</small></div>
+            </div>
           </div>
-          <a href="/register" className="button">Register to Compete</a>
+
+          <div className="home-hero-art">
+            <div className="art-noise" />
+            <div className="art-label">OFFICIAL EVENT MARK</div>
+            <img src={tdgLogo} alt="The Training Day Games logo" />
+            <div className="art-footer"><span>TRAINING DAY GAMES</span><span>MIAMI / 2027</span></div>
+          </div>
         </div>
+      </section>
+
+      <div className="runline" aria-hidden="true">
+        <span>TRAIN HARD · SHOW UP · COMPETE WELL · TRAIN HARD · SHOW UP · COMPETE WELL ·</span>
       </div>
 
-      <section id="divisions">
+      <section className="statement-section">
+        <div className="container statement-grid">
+          <div className="micro-label">The idea</div>
+          <h2>NOT ANOTHER<br/>GENERIC FITNESS<br/>COMPETITION.</h2>
+          <div className="statement-copy">
+            <p>Every touchpoint should feel intentional — athlete check-in, lane setup, warm-up, scoring, vendors, spectators and the competition floor itself.</p>
+            <p>Come for the test. Leave feeling like you were part of something worth doing again.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="division-section" id="divisions">
         <div className="container">
-          <div className="eyebrow">Choose your division</div>
-          <h2 className="section-title">Built for real competition.</h2>
-          <p className="muted">Starter pricing and standards can be replaced with final event details from the organizer dashboard.</p>
-          <div className="grid">
-            {divisions.map((d) => (
-              <div className="card" key={d.name}>
+          <div className="section-head">
+            <div><div className="micro-label">Choose your field</div><h2>FIND YOUR DIVISION.</h2></div>
+            <p>Same event. Different standards. Pick the level that lets you compete hard.</p>
+          </div>
+          <div className="division-grid">
+            {divisions.map((d, index) => (
+              <a className="division-tile" href={`/register?division=${encodeURIComponent(d.name)}`} key={d.name}>
+                <div className="division-top"><span>{String(index + 1).padStart(2, "0")}</span><small>{d.tag}</small></div>
                 <h3>{d.name}</h3>
-                <p className="muted">{d.description}</p>
-                <div className="price">{d.price} <small>per registration</small></div>
-                <a href={`/register?division=${encodeURIComponent(d.name)}`} className="button">Select {d.name}</a>
-              </div>
+                <p>{d.description}</p>
+                <div className="division-arrow">REGISTER <span>↗</span></div>
+              </a>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="black-band">
+        <div className="container black-band-grid">
+          <div><div className="gold-rule"/><h2>YOUR TRAINING<br/>HAS A DAY.</h2></div>
+          <div className="black-band-copy"><p>You do the work when nobody is watching. This is where you get to put it on the floor.</p><a href="/register">CLAIM YOUR SPOT →</a></div>
         </div>
       </section>
     </main>
