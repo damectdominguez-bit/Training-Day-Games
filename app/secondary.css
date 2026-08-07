@@ -1,0 +1,6 @@
+.simple-page { padding: 96px 0 120px; }
+.simple-page h1, .confirmation-page h1 { margin: 12px 0 24px; font-size: clamp(68px, 8vw, 118px); line-height: .84; letter-spacing: -.08em; }
+.simple-page-copy, .confirmation-page p { max-width: 560px; color: #6f6b64; font-size: 15px; line-height: 1.65; margin: 0 0 34px; }
+.simple-page table { margin-top: 48px; }
+.confirmation-page { min-height: calc(100vh - 79px); padding: 120px 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+@media (max-width:780px) { .simple-page, .confirmation-page { padding: 72px 0; } .simple-page h1, .confirmation-page h1 { font-size: 62px; } }
