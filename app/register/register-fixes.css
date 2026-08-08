@@ -1,0 +1,13 @@
+.reg6-left{padding:28px 32px;box-shadow:inset -4px 0 0 var(--blue)}
+.reg6-photo{object-position:62% center;filter:contrast(1.06) saturate(1.06) brightness(.96)}
+.reg6-photo-overlay{background:linear-gradient(90deg,rgba(0,0,0,.76) 0%,rgba(0,0,0,.58) 44%,rgba(0,0,0,.27) 74%,rgba(0,0,0,.13) 100%)}
+.reg6-left-top{font-size:9px}
+.reg6-event-block{max-width:330px}
+.reg6-event-kicker{margin-bottom:9px}
+.reg6-event-block h1{font-size:clamp(38px,4.1vw,62px);line-height:.88;margin-bottom:12px}
+.reg6-event-block p{font-size:12px;line-height:1.45;max-width:300px}
+.reg6-event-data{padding-top:12px;gap:10px 16px;max-width:380px}
+.reg6-event-data span{font-size:7px}
+.reg6-event-data strong{font-size:11px}
+.reg6-event-data .price strong{font-size:26px}
+@media(max-width:980px){.reg6-left{padding:24px}.reg6-event-block h1{font-size:52px}}
