@@ -2,6 +2,7 @@
 
 import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { registrationHero } from "./registration-hero-data";
 import "./register-v6.css";
 
 type Athlete={id:number;firstName:string;lastName:string;email:string;gender:string;shirtSize:string;gym:string};
@@ -54,7 +55,7 @@ function RegistrationWizard(){
 
   return <main className="reg6">
     <aside className="reg6-left">
-      <img className="reg6-photo" src="/registration-hero.svg" alt="Competition athlete" />
+      <img className="reg6-photo" src={registrationHero} alt="Competition athlete" />
       <div className="reg6-photo-overlay" />
       <div className="reg6-left-top"><span>TDG / 2027</span><span>Miami, FL</span></div>
 
