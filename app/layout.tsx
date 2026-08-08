@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <a href="/#event">The Event</a>
               <a href="/#divisions">Divisions</a>
               <a href="/leaderboard">Leaderboard</a>
-              <a href="/register" className="nav-cta">Register</a>
+              <a href="/register" className="nav-cta" style={{ background: "#e7ff00", color: "#0b0b0b" }}>Register</a>
             </nav>
           </div>
         </header>
