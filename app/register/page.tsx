@@ -4,6 +4,7 @@ import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { registrationHero } from "./registration-hero-data";
 import "./register-v6.css";
+import "./register-fixes.css";
 
 type Athlete={id:number;firstName:string;lastName:string;email:string;gender:string;shirtSize:string;gym:string};
 type Captain={firstName:string;lastName:string;email:string;phone:string;gender:string;birthDate:string;gym:string;shirtSize:string};
